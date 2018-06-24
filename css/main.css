@@ -158,9 +158,17 @@ fmath {
 }
 
 .dispense-box {
-      border-width: 2px;
-    border-style: dotted;
-    border-color: orange;
-    border-radius: 10px;
-    padding: 1rem;
+  border-width: 2px;
+  border-style: dotted;
+  border-color: orange;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.donation-amount{
+  text-align: right;
+  color: green;
+}
+.dispense-amount{
+  text-align: right;
 }

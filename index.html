@@ -30,8 +30,8 @@ Attributions:
     <!-- jquery is here because scripts need it early on. may want to move other js imports here. -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <!-- jqMath allows for real equation formatting -->
-    <script src="js/jqmath-etc-0.4.6.min.js" charset="utf-8"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <!--<script src="js/jqmath-etc-0.4.6.min.js" charset="utf-8"></script>-->
+    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>-->
     
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <style>
@@ -42,19 +42,19 @@ Attributions:
 
     <!-- note: lodash is only used for _.debounce() -->
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
-    <script src="js/tipr.min.js"></script>
+    <!--<script src="js/tipr.min.js"></script>-->
 
 
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.2.3/milligram.min.css">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
     <link rel="stylesheet" type="text/css" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
 
-    <link rel="stylesheet" type="text/css" href="css/jqmath-0.4.3.css">
+    <!--<link rel="stylesheet" type="text/css" href="css/jqmath-0.4.3.css">-->
 
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <!--<link rel="stylesheet" type="text/css" href="css/themes/dark1.css">-->
     <link rel="stylesheet" type="text/css" href="css/ionicons.css">
-    <link rel="stylesheet" type="text/css" href="css/tipr-corso.css">
+    <!--<link rel="stylesheet" type="text/css" href="css/tipr-corso.css">-->
 
     <title>0xBitcoin Gas Faucet</title>
     <meta name="descripton" content="Live statistics for 0xBitcoin - the mined bitcoin-like token for Ethereum.">
@@ -192,24 +192,22 @@ Attributions:
               <table>
                 <tr>
                   <th>Time</th>
-                  <th>Tx Hash</th>
-                  <!--<th>Destination</th>-->
                   <th>Gas</th>
+                  <th style="text-align: right;">Tokens</th>
                 </tr>
-                <tr v-for="event in recentEvents.slice().reverse().slice(0, 12)">
+                <tr v-for="event in sortedRecentEvents.slice().reverse().slice(0, 12)">
+                <!-- <tr v-for="event in sortedRecentEvents.slice().reverse()"> -->
                   <td>
-                    <a v-bind:href="'https://etherscan.io/block/' + event.block_number">{{ ethBlockNumberToTimestamp(event.block_number) }}</a>
+                    <a v-bind:href="'https://etherscan.io/tx/' + event.tx_hash">{{ ethBlockNumberToTimestamp(event.block_number) }}</a>
                   </td>
-                  <td>
-                    <a v-bind:href="'https://etherscan.io/tx/' + event.tx_hash">{{ event.tx_hash.substr(0, 7) }}..</a>
+                  <td v-if="event.type == 'dispense'">
+                      {{ event.gas_price.toFixed(1) }}
                   </td>
-                  <!--
-                  <td>
-                    <a v-bind:href="'https://etherscan.io/address/' + event.destination">{{ event.destination.substr(0, 8) }}..</a>
+                  <td  v-if="event.type == 'dispense'" class='dispense-amount'>
+                    {{ event.tokens.toFixed(3) }}
                   </td>
-                  -->
-                  <td>
-                    {{ event.gas_price.toFixed(1) }}
+                  <td v-if="event.type == 'donate'" colspan="2" class='donation-amount'>
+                    donation! +{{ event.tokens.toFixed(3) }}
                   </td>
                 </tr>
               </table>
@@ -322,7 +320,7 @@ Attributions:
     <script type="text/javascript" src="js/faucet-contract-app.js"></script>
     <script type="text/javascript" src="js/faucet-vue.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
-    <script type="text/javascript" src="js/graphs.js"></script>
+    <!--<script type="text/javascript" src="js/graphs.js"></script>-->
 
     <script type="text/javascript">
 
@@ -338,11 +336,11 @@ Attributions:
         $(document).ready(function() {
             log("DOMready");
           /* initialize tipr tooltips */
-          $('.tip').tipr({
-              'speed': 800,
-              //'mode': 'above',
-              //'space': 500
-          });
+          //$('.tip').tipr({
+          //    'speed': 800,
+          //    //'mode': 'above',
+          //    //'space': 500
+          //});
         });
       } catch (err) {
         showError("Sorry, failed to load jquery. Try again later.");
