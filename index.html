@@ -57,7 +57,7 @@ Attributions:
     <!--<link rel="stylesheet" type="text/css" href="css/tipr-corso.css">-->
 
     <title>0xBitcoin Gas Faucet</title>
-    <meta name="descripton" content="Live statistics for 0xBitcoin - the mined bitcoin-like token for Ethereum.">
+    <meta name="descripton" content="Faucet which dispenses free 0xBitcoin tokens. Requires an Ethereum-compatible browser.">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117165354-1"></script>
     <script type="text/javascript" src="js/gtag.js"></script>
@@ -103,10 +103,13 @@ Attributions:
           </div>
         </div>
       </div>
+      <div class="row" class="add-top-padding">
+        <div class="add-top-padding status-string" v-html="status_string"></div>
+      </div>
       <div class="row" id="row-faucet">
         <div class="column">
           <div class="row">
-            <div class="column"><h4 class="add-top-padding"><a name="faucet"></a>Get Tokens</h4></div>
+            <div class="column"><h4><a name="faucet"></a>Get Tokens</h4></div>
           </div>
           <div class="row dispense-box">
             <div class="column">
@@ -181,9 +184,6 @@ Attributions:
           </div>
         </div>
         <div class="column">
-          <div class="row">
-            <div style="max-width: 400px; margin-left: auto; margin-right: auto;" class="add-top-padding" v-html="status_string"></div>
-          </div>
           <div style="max-width: 400px; margin-left: auto; margin-right: auto;">
             <div class="row add-top-padding-2">
               <h5>Past transactions</h5>

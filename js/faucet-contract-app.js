@@ -133,7 +133,7 @@ FaucetApp = {
         console.log('1 - sending tx');
         gasFaucetInstance = instance;
         let result = gasFaucetInstance.dispense(destination, {from: account, gasPrice: gasprice});
-        faucet_app.setStatusString('Dispense transaction pending... <span style="font-style: italic;">Open metamask to approve if it does not open automatically.</span>');
+        faucet_app.setStatusString('Dispense transaction pending... Open MetaMask to approve if it does not open automatically.');
 
         return result;
 
@@ -145,6 +145,7 @@ FaucetApp = {
         let tx_hash_link = '<a href="https://etherscan.io/tx/' + tx_hash + '">' + tx_hash.substr(0, 8) + '</a>';
         console.log('2 - sent tx');
         faucet_app.setStatusString("Dispense transaction " + tx_hash_link + " was successful.");
+        faucet_app.update();
       }).catch(function(err) {
         console.log('3 - err');
         console.log(err.message);

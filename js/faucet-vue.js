@@ -8,7 +8,7 @@ faucet_app = new Vue({
     rate_wei_per_satoshi: 0,
     contract_address: '',
     status_string: '',
-    dispense_events: [],
+    all_events: [],
     latest_eth_block: 0,
   },
   created: function () {
@@ -55,7 +55,7 @@ faucet_app = new Vue({
       if(this.contract_address == '' || this.contract_address == '0x') {
         return [];
       }
-      //console.log(this.dispense_events.length, 'dispense events', this.dispense_events);
+      //console.log(this.all_events.length, 'dispense events', this.all_events);
       // let donate_events = [{
       //   block_number: 8888888, 
       //   tx_hash: '0x3154ef180a81ae82f132cc67e4a08f48858f7e7db18cb4c05122d81e9b43ebb1',
@@ -67,7 +67,7 @@ faucet_app = new Vue({
       //let donate_events = [];
       //console.log(donate_events.length, 'donate events', donate_events);
 
-      let events = this.dispense_events;
+      let events = this.all_events;
       //let events = this.dispenseEvents;
       //let events = this.dispenseEvents.concat(this.donateEvents);
       return events
@@ -76,7 +76,7 @@ faucet_app = new Vue({
   methods: {
     /* called by setContractAddress, so runs once addres is set */
     update: function (e) {
-
+      this.all_events = [];
       eth.blockNumber().then((value)=>{
         this.latest_eth_block = parseInt(value.toString(10), 10);
 
@@ -133,164 +133,151 @@ faucet_app = new Vue({
       return expected_tokens;
     },
     pushEvent: function (event) {
-      this.dispense_events.push(event);
+      this.all_events.push(event);
     },
     getDispenseEvents: function (num_blocks_into_past) {
-      let events = []
-      //eth.blockNumber().then((value)=>{
-        //latest_eth_block = parseInt(value.toString(10), 10);
-        latest_eth_block = this.latest_eth_block;
-        /* subtract 1.5 minutes of blocks because infura can be slow */
-        latest_eth_block -= 6;
-        //log('loaded latest_eth_block:', latest_eth_block);
-        //log('filtering addy', this.contract_address);
-        eth.getLogs({
-          fromBlock: latest_eth_block - num_blocks_into_past,
-          toBlock: latest_eth_block,
-          address: this.contract_address,
-          topics: ['0xeb9df064f68e905565a2656b40e16dd2df0c9c21d72fda0d3a97de56f826f3d8', null],
-        })
-        .then((result) => {
-          log("got filter results:", result.length, "transactions");
+      var latest_eth_block = this.latest_eth_block;
+      /* subtract 1.5 minutes of blocks because infura can be slow */
+      //latest_eth_block -= 6;
+      eth.getLogs({
+        fromBlock: latest_eth_block - num_blocks_into_past,
+        toBlock: latest_eth_block,
+        address: this.contract_address,
+        topics: ['0xeb9df064f68e905565a2656b40e16dd2df0c9c21d72fda0d3a97de56f826f3d8', null],
+      })
+      .then((result) => {
+        log("got filter results:", result.length, "transactions");
 
-          var contract_address = this.contract_address;
-          var event_save_fn = this.pushEvent;
+        var contract_address = this.contract_address;
+        var event_save_fn = this.pushEvent;
 
-          //console.log('4addresssss:', this.contract_address);
-          result.forEach(function(transaction){
-            //console.log(transaction);
-            function getMinerAddressFromTopic(address_from_topic) {
-              return '0x' + address_from_topic.substr(26, 41);
+        //console.log('4addresssss:', this.contract_address);
+        result.forEach(function(transaction){
+          //console.log(transaction);
+          function getMinerAddressFromTopic(address_from_topic) {
+            return '0x' + address_from_topic.substr(26, 41);
+          }
+          var tx_hash = transaction['transactionHash'];
+          var block_number = parseInt(transaction['blockNumber'].toString());
+          var destination = getMinerAddressFromTopic(transaction['topics'][1].toString());
+          //console.log('data is ', transaction['data'].substr(2, 65));
+          //console.log('bn is ', new Eth.BN(transaction['data'].substr(2, 65), 16).toString());
+          //console.log('bn is ', new Eth.BN(transaction['data'].substr(2, 65), 16).toNumber());
+          var tokens = (new Eth.BN(transaction['data'].substr(2, 65), 16).toNumber()) / 10**8;
+          
+          //console.log('5addresssss:', contract_address);
+          eth.getTransactionByHash(tx_hash)
+          .then(function(result){
+            //console.log(result);
+            let gas_price = result.gasPrice.toNumber() / 10**9;
+            //console.log('gas_price', gas_price);
+            //let gas = result.gas.toNumber();
+            //console.log('gas', gas);
+            //let nonce = result['input'].substr(2, 72);
+            //log('tx_hash', tx_hash)
+            //log('  nonce', nonce);
+
+            //mined_blocks.push([block_number, tx_hash, miner_address, nonce])
+
+            switch(transaction['topics'][0].toString()){
+              case "0xeb9df064f68e905565a2656b40e16dd2df0c9c21d72fda0d3a97de56f826f3d8":
+                //console.log('6addresssss:', contract_address);
+                event_save_fn({
+                  block_number: block_number, 
+                  tx_hash: tx_hash,
+                  type: 'dispense',
+                  destination: destination,
+                  gas_price: gas_price,
+                  tokens: tokens,
+                });
+                break;
+              default:
+                log('GOT UNKNOWN TOPIC:', transaction['topics'][0].toString());
+                log(transaction);
+                break;
             }
-            var tx_hash = transaction['transactionHash'];
-            var block_number = parseInt(transaction['blockNumber'].toString());
-            var destination = getMinerAddressFromTopic(transaction['topics'][1].toString());
-            //console.log('data is ', transaction['data'].substr(2, 65));
-            //console.log('bn is ', new Eth.BN(transaction['data'].substr(2, 65), 16).toString());
-            //console.log('bn is ', new Eth.BN(transaction['data'].substr(2, 65), 16).toNumber());
-            var tokens = (new Eth.BN(transaction['data'].substr(2, 65), 16).toNumber()) / 10**8;
-            
-            //console.log('5addresssss:', contract_address);
-            eth.getTransactionByHash(tx_hash)
-            .then(function(result){
-              //console.log(result);
-              let gas_price = result.gasPrice.toNumber() / 10**9;
-              //console.log('gas_price', gas_price);
-              //let gas = result.gas.toNumber();
-              //console.log('gas', gas);
-              //let nonce = result['input'].substr(2, 72);
-              //log('tx_hash', tx_hash)
-              //log('  nonce', nonce);
-
-              //mined_blocks.push([block_number, tx_hash, miner_address, nonce])
-
-              switch(transaction['topics'][0].toString()){
-                case "0xeb9df064f68e905565a2656b40e16dd2df0c9c21d72fda0d3a97de56f826f3d8":
-                  //console.log('6addresssss:', contract_address);
-                  event_save_fn({
-                    block_number: block_number, 
-                    tx_hash: tx_hash,
-                    type: 'dispense',
-                    destination: destination,
-                    gas_price: gas_price,
-                    tokens: tokens,
-                  });
-                  break;
-                default:
-                  log('GOT UNKNOWN TOPIC:', transaction['topics'][0].toString());
-                  log(transaction);
-                  break;
-              }
-            });
           });
         });
-      //});
+      });
       return events
     },
     getDonateEvents: function (num_blocks_into_past) {
-      let events = []
-      //return [];
-      //eth.blockNumber().then((value)=>{
-        //latest_eth_block = parseInt(value.toString(10), 10);
-        latest_eth_block = this.latest_eth_block;
-        /* subtract 1.5 minutes of blocks because infura can be slow */
-        latest_eth_block -= 6;
-        //log('loaded latest_eth_block:', latest_eth_block);
-        //log('filtering addy', this.contract_address);
-        eth.getLogs({
-          fromBlock: latest_eth_block - num_blocks_into_past,
-          toBlock: latest_eth_block,
-          //address: null,
-          topics: [
-            '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef', 
-            null,
-            '0x0000000000000000000000008302d610f9c6b94560befb9a7118b4aa7f414ec3'],
-        })
-        .then((result) => {
-          log("got filter results:", result.length, "transactions");
+      var latest_eth_block = this.latest_eth_block;
+      /* subtract 1.5 minutes of blocks because infura can be slow */
+      //latest_eth_block -= 6;
+      eth.getLogs({
+        fromBlock: latest_eth_block - num_blocks_into_past,
+        toBlock: latest_eth_block,
+        //address: null,
+        topics: [
+          '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef', 
+          null,
+          '0x0000000000000000000000008302d610f9c6b94560befb9a7118b4aa7f414ec3'],
+      })
+      .then((result) => {
+        log("got filter results:", result.length, "transactions");
 
-          var contract_address = this.contract_address;
-          var event_save_fn = this.pushEvent;
+        var contract_address = this.contract_address;
+        var event_save_fn = this.pushEvent;
 
-          //console.log('4addresssss:', this.contract_address);
-          result.forEach(function(transaction){
-            //console.log(transaction);
-            function getMinerAddressFromTopic(address_from_topic) {
-              return '0x' + address_from_topic.substr(26, 41);
-            }
-            var tx_hash = transaction['transactionHash'];
-            var block_number = parseInt(transaction['blockNumber'].toString());
-            //var destination = getMinerAddressFromTopic(transaction['topics'][1].toString());
-            //console.log('data is ', transaction['data'].substr(2, 65));
-            //console.log('bn is ', new Eth.BN(transaction['data'].substr(2, 65), 16).toString());
-            //console.log('bn is ', new Eth.BN(transaction['data'].substr(2, 65), 16).toNumber());
-            var tokens = (new Eth.BN(transaction['data'].substr(2, 65), 16).toNumber()) / 10**8;
+        //console.log('4addresssss:', this.contract_address);
+        result.forEach(function(transaction){
+          //console.log(transaction);
+          function getMinerAddressFromTopic(address_from_topic) {
+            return '0x' + address_from_topic.substr(26, 41);
+          }
+          var tx_hash = transaction['transactionHash'];
+          var block_number = parseInt(transaction['blockNumber'].toString());
+          //var destination = getMinerAddressFromTopic(transaction['topics'][1].toString());
+          //console.log('data is ', transaction['data'].substr(2, 65));
+          //console.log('bn is ', new Eth.BN(transaction['data'].substr(2, 65), 16).toString());
+          //console.log('bn is ', new Eth.BN(transaction['data'].substr(2, 65), 16).toNumber());
+          var tokens = (new Eth.BN(transaction['data'].substr(2, 65), 16).toNumber()) / 10**8;
 
 
-            event_save_fn({
-              block_number: block_number, 
-              tx_hash: tx_hash,
-              type: 'donate',
-              //destination: destination,
-              //gas_price: gas_price,
-              tokens: tokens,
-            });
-            
-            //console.log('5addresssss:', contract_address);
-            //eth.getTransactionByHash(tx_hash)
-            //.then(function(result){
-              //console.log(result);
-              //let gas_price = result.gasPrice.toNumber() / 10**9;
-              //console.log('gas_price', gas_price);
-              //let gas = result.gas.toNumber();
-              //console.log('gas', gas);
-              //let nonce = result['input'].substr(2, 72);
-              //log('tx_hash', tx_hash)
-              //log('  nonce', nonce);
-
-              //mined_blocks.push([block_number, tx_hash, miner_address, nonce])
-
-              // switch(transaction['topics'][0].toString()){
-              //   case "0xeb9df064f68e905565a2656b40e16dd2df0c9c21d72fda0d3a97de56f826f3d8":
-              //     console.log('6addresssss:', contract_address);
-              //     event_save_fn({
-              //       block_number: block_number, 
-              //       tx_hash: tx_hash,
-              //       type: 'donate',
-              //       destination: destination,
-              //       gas_price: gas_price,
-              //       tokens: tokens,
-              //     });
-              //     break;
-              //   default:
-              //     log('GOT UNKNOWN TOPIC:', transaction['topics'][0].toString());
-              //     log(transaction);
-              //     break;
-              // }
-            //});
+          event_save_fn({
+            block_number: block_number, 
+            tx_hash: tx_hash,
+            type: 'donate',
+            //destination: destination,
+            //gas_price: gas_price,
+            tokens: tokens,
           });
+          
+          //console.log('5addresssss:', contract_address);
+          //eth.getTransactionByHash(tx_hash)
+          //.then(function(result){
+            //console.log(result);
+            //let gas_price = result.gasPrice.toNumber() / 10**9;
+            //console.log('gas_price', gas_price);
+            //let gas = result.gas.toNumber();
+            //console.log('gas', gas);
+            //let nonce = result['input'].substr(2, 72);
+            //log('tx_hash', tx_hash)
+            //log('  nonce', nonce);
+
+            //mined_blocks.push([block_number, tx_hash, miner_address, nonce])
+
+            // switch(transaction['topics'][0].toString()){
+            //   case "0xeb9df064f68e905565a2656b40e16dd2df0c9c21d72fda0d3a97de56f826f3d8":
+            //     console.log('6addresssss:', contract_address);
+            //     event_save_fn({
+            //       block_number: block_number, 
+            //       tx_hash: tx_hash,
+            //       type: 'donate',
+            //       destination: destination,
+            //       gas_price: gas_price,
+            //       tokens: tokens,
+            //     });
+            //     break;
+            //   default:
+            //     log('GOT UNKNOWN TOPIC:', transaction['topics'][0].toString());
+            //     log(transaction);
+            //     break;
+            // }
+          //});
         });
-      //});
+      });
       return events
     },
   }

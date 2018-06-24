@@ -172,3 +172,9 @@ fmath {
 .dispense-amount{
   text-align: right;
 }
+
+.status-string{
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
