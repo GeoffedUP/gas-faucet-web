@@ -1,0 +1,355 @@
+<!--
+Attributions:
+  Milligram - https://github.com/milligram/milligram
+  ionicons - http://ionicons.com/
+  ethjs - https://github.com/ethjs/ethjs
+  Google Material Design Color Palatte - https://htmlcolorcodes.com/color-chart/material-design-color-chart/
+  Chart.js - http://www.chartjs.org/
+  jqMath - https://mathscribe.com/author/jqmath.html
+  TIPR tooltips - http://www.tipue.com/tipr/
+  Gas by j.ledkov from the Noun Project
+-->
+
+<html>
+  <head>
+    <meta charset='utf-8'>
+
+    <!-- favicon metadata - generated with https://realfavicongenerator.net -->
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+    <link rel="manifest" href="icons/site.webmanifest">
+    <link rel="mask-icon" href="icons/safari-pinned-tab.svg" color="#ff8024">
+    <link rel="shortcut icon" href="icons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="icons/browserconfig.xml">
+    <meta name="theme-color" content="#ff8024">
+    <!-- end favicon metadata -->
+
+
+    <!-- jquery is here because scripts need it early on. may want to move other js imports here. -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <!-- jqMath allows for real equation formatting -->
+    <script src="js/jqmath-etc-0.4.6.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+
+    <!-- note: lodash is only used for _.debounce() -->
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+    <script src="js/tipr.min.js"></script>
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.2.3/milligram.min.css">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+    <link rel="stylesheet" type="text/css" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
+
+    <link rel="stylesheet" type="text/css" href="css/jqmath-0.4.3.css">
+
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <!--<link rel="stylesheet" type="text/css" href="css/themes/dark1.css">-->
+    <link rel="stylesheet" type="text/css" href="css/ionicons.css">
+    <link rel="stylesheet" type="text/css" href="css/tipr-corso.css">
+
+    <title>0xBitcoin Gas Faucet</title>
+    <meta name="descripton" content="Live statistics for 0xBitcoin - the mined bitcoin-like token for Ethereum.">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117165354-1"></script>
+    <script type="text/javascript" src="js/gtag.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      var el = function(id){ return document.querySelector(id); };
+      /* 'safe' version if el that returns a dummy for non-existent elements */
+      var el_safe = function(id) { 
+        let e = el(id); 
+        if (e) {
+          return e;
+        } else {
+          return {};
+        }
+      }
+
+      function showError(message) {
+        el('#row-faucet').innerHTML = message;
+      }
+
+      var log = function(){
+        // 1. Convert args to a normal array
+        var args = Array.prototype.slice.call(arguments);
+        // 2. Prepend log prefix log string
+        args.unshift(((Date.now()-globalTimerStart)/1000).toFixed(2) + 's ');
+        // 3. Pass along arguments to console.log
+        console.log.apply(console, args);
+      }
+      var globalTimerStart = Date.now();
+
+      let searchParams = new URLSearchParams(window.location.search)
+    </script>
+    <div class="container" id="faucet" v-cloak>
+      <div class="row">
+        <div class="column">
+          <img class="top-logo" alt="0xBitcoin Gas Faucet Logo" src="img/0xBTC_Orange_faucet-40px.png" height=40 width=40 />
+          <h1>0xBitcoin Gas Faucet</h1>
+        </div>
+        <div class="column">
+          <div style="text-align: right; margin: 0.67em 0; font-size: 1.1em;">
+            Faucet balance: <span class="faucet-balance">{{faucetDisplayBalance}}</span> 0xBTC
+          </div>
+        </div>
+      </div>
+      <div class="row" id="row-faucet">
+        <div class="column">
+          <div class="row">
+            <div class="column"><h4 class="add-top-padding"><a name="faucet"></a>Get Tokens</h4></div>
+          </div>
+          <div class="row dispense-box">
+            <div class="column">
+                <div class="row">
+                  <div class="column">
+                    <label for="addressField" class="add-top-padding-2">Recipient Address:</label>
+                    <input type="text" :value="recipient_address" @input="updateAddress" id="addressField" onfocus="this.select()"></input>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="column">
+                    <label for="gasPriceField" class="add-top-padding-2">Gas Price:</label>
+
+                    <input type="text" :value="gasprice" @input="updateGasPrice" id="gasPriceField" onfocus="this.select()"></input><span style="margin-left:10px;line-height: 40px;">Gwei</span>
+                  </div>
+                  <div class="column">
+                    <label class="add-top-padding-2">You will get:</label>
+                    <div style="text-align: right;">
+                      <span id="expectedTokens" class="expected-tokens">{{expectedTokens}}</span> 0xBTC
+                    </div>
+                  </div>
+                </div>
+                <!-- display if TXs over 0.1 gwei will fail (empty faucet) -->
+                <div v-if="this.rate_wei_per_satoshi != 0 && this.getTokensForGasPrice(0.1) >= this.faucet_balance" class="row">
+                  <div class="column">
+                    <span class="notification" style="text-align: justify; color: #D32F2F;">
+                      The faucet is too low to dispense any tokens; sorry! Check again later.
+                    </span>
+                  </div>
+                </div>
+                <!-- display if gasprice is too high (over total faucet balance) -->
+                <div v-else-if="this.rate_wei_per_satoshi != 0 && this.maxGwei != 0 && this.calculatedTokens > this.faucet_balance" class="row">
+                  <div class="column">
+                    <span class="notification" style="text-align: justify; color: #D32F2F;">
+                      The total balance of the faucet is {{ faucet_balance.toFixed(3) }} tokens. Transactions over {{ maxGwei.toFixed(2) }} Gwei will fail.
+                    </span>
+                  </div>
+                </div>
+                <div v-else class="row">
+                  <div class="column" style="text-align: right;">
+                    <a class="button button-outline" v-on:click="dispenseTokens" id="buttonDispense">Get Tokens</a>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="column"><h4 class="add-top-padding">Donate</h4></div>
+          </div>
+          <div class="row">
+            <div class="column">
+              <p>
+                Feeling generous? Donate 0xBitcoin here to top up the faucet's balance.
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <!--<div class="column">
+              <label for="donateGasPriceField" class="add-top-padding-2">Gas Price:</label>
+
+              <input type="text" :value="gasprice" @input="updateGasPrice" id="donateGasPriceField" onfocus="this.select()"></input>
+              <span style="margin-left:10px;line-height: 40px;">Gwei</span>
+            </div>-->
+            <div class="column">
+              <label for="donateAmountField" class="add-top-padding-2">Tokens:</label>
+              <input type="text" :value="donate_amount" @input="updateDonateAmount" id="donateAmountField" onfocus="this.select()"></input>
+              <span style="margin-left:10px;line-height: 40px;">0xBTC</span>
+            </div>
+            <div class="column" style="text-align: right;">
+              <label for="buttonDonate" class="add-top-padding-2" style="visibility: hidden;">.</label>
+              <a class="button button-outline" v-on:click="donateTokens" id="buttonDonate">Donate Tokens</a>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="row">
+            <div style="max-width: 400px; margin-left: auto; margin-right: auto;" class="add-top-padding" v-html="status_string"></div>
+          </div>
+          <div style="max-width: 400px; margin-left: auto; margin-right: auto;">
+            <div class="row add-top-padding-2">
+              <h5>Past transactions</h5>
+            </div>
+            <div class="row">
+              <table>
+                <tr>
+                  <th>Time</th>
+                  <th>Tx Hash</th>
+                  <!--<th>Destination</th>-->
+                  <th>Gas</th>
+                </tr>
+                <tr v-for="event in recentEvents.slice().reverse().slice(0, 12)">
+                  <td>
+                    <a v-bind:href="'https://etherscan.io/block/' + event.block_number">{{ ethBlockNumberToTimestamp(event.block_number) }}</a>
+                  </td>
+                  <td>
+                    <a v-bind:href="'https://etherscan.io/tx/' + event.tx_hash">{{ event.tx_hash.substr(0, 7) }}..</a>
+                  </td>
+                  <!--
+                  <td>
+                    <a v-bind:href="'https://etherscan.io/address/' + event.destination">{{ event.destination.substr(0, 8) }}..</a>
+                  </td>
+                  -->
+                  <td>
+                    {{ event.gas_price.toFixed(1) }}
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="column">
+          <h4 class="add-top-padding">How does it work?</h4>
+          <p>
+            All Ethereum transactions require a certain amount of 'gas' to
+            execute. This contract analyzes the actual gas spent on each
+            request, and returns with a proportional amount of 0xBitcoin. This
+            means that a request at 20 Gwei will pay out twice as many tokens
+            as a request sent at 10 Gwei.
+          </p>
+          <p>
+            The ratio of 0xBitcoin to Gas is set in the contract, and the owner
+            has the ability to adjust the ratio. Periodic adjustments are
+            necessary due to the constantly changing prices of 0xBTC and ETH.
+          </p>
+          <p>
+            <span style="font-weight: 700;">Where does the ETH go?</span>
+            Anyone using this faucet is essentially trading ETH for 0xBTC in
+            the form of gas. These fees are not collected by this contract,
+            they are earned by the miners of the Ethereum blockchain. Future
+            versions of this faucet may 'burn' ETH instead.
+          </p>
+          <p>
+            <span style="font-weight: 700;">Are there any fees?</span>
+            No fees are collected by the faucet; 100% of donated tokens are
+            available for others to withdraw. The contract itself does not
+            handle ETH.
+          </p>
+          <p>
+            <span style="font-weight: 700;">Why not pay out more tokens?</span>
+            If the faucet dispensed more tokens then the price of Gas, there
+            would be an incentive for someone to drain the faucet for profit.
+            Some faucet designs use a different approach to prevent this, usually related to
+            rate-limiting. These approaches have flaws and inconvenience normal 
+            users more than abusers. This faucet's goal is to be an easy way to
+            get a small number of tokens to play with; not as a source of 
+            income.
+          </p>
+        </div>
+      </div>
+      <div id="row-footer">
+        <div class="row add-top-padding add-bottom-padding-5">
+          <div class="column">
+            <div>
+            <!--<div style="font-size:0.875em;">-->
+              0xBitcoin Gas Faucet
+              <span id="footerversion">
+                v0.0.0
+              </span>
+              <br />
+              <span>
+                <a href="https://github.com/0x1d00ffff/gas-faucet">
+                  <span class="link-icon"><i class="icon ion-social-github navicon"></i></span>
+                  source on github
+                </a>
+              </span>
+            </div>
+          </div>
+          <div class="column" style="text-align: right;">
+            <div>
+              faucet contract address:
+              <br />
+              <a v-bind:href="'https://etherscan.io/address/' + contract_address"> {{ contract_address }}</a>
+            </div>
+            <div style="margin-top: 1rem;">
+              made with <font color="#C0392B">❤</font> by
+              <br />
+              <a href="https://etherscan.io/address/0x1d00FFffB205CC0C5a51E7c77a7668A8B90BBb90">0x1d00FFffB205CC0C5a51E7c77a7668A8B90BBb90</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="js/ethereumjs-testrpc.js"></script>
+    <script type="text/javascript" src="js/ethjs.js"></script>
+    <script type="text/javascript" src="js/truffle-contract.js"></script>
+    <script type="text/javascript" src="js/web3.min.js"></script>
+
+
+    <script type="text/javascript">
+
+      function showNoMetamaskError(){
+        showError('<span class="error">Please install Metamask or use an Ethereum-enabled browser. No web3 interface found.</span>');
+      }
+
+      function showNotLoggedInError(){
+        showError('<span class="error">Could not detect accounts. Please log in to Metamask.</span>');
+      }
+
+      if (typeof window.web3 !== 'undefined' && typeof window.web3.currentProvider !== 'undefined') {
+        var eth = new Eth(window.web3.currentProvider);
+      } else {
+        // needs metamask
+        //var eth = new Eth(new Eth.HttpProvider("https://mainnet.infura.io/MnFOXCPE2oOhWpOCyEBT"));
+        showNoMetamaskError();
+        fail;
+      }
+    </script>
+
+
+    <!--<script type="text/javascript" src="js/abi.js"></script>-->
+    <script type="text/javascript" src="js/faucet-contract-app.js"></script>
+    <script type="text/javascript" src="js/faucet-vue.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/graphs.js"></script>
+
+    <script type="text/javascript">
+
+
+
+
+      function initPage() {
+        let searchParams = new URLSearchParams(window.location.search)
+        $("#row-faucet").show();
+      }
+      
+      try {
+        $(document).ready(function() {
+            log("DOMready");
+          /* initialize tipr tooltips */
+          $('.tip').tipr({
+              'speed': 800,
+              //'mode': 'above',
+              //'space': 500
+          });
+        });
+      } catch (err) {
+        showError("Sorry, failed to load jquery. Try again later.");
+        fail;
+      } finally {
+        initPage();
+      }
+    </script>
+  </body>
+</html>
