@@ -1,4 +1,4 @@
-if (document.location.hostname == "0x1d00ffff.github.io") {
+if (document.location.hostname == "0xbitcoinfaucet.net") {
 	console.log('using gtag');
 	window.dataLayer = window.dataLayer || [];
 	function gtag(){dataLayer.push(arguments);}
