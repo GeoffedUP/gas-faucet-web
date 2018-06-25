@@ -184,6 +184,6 @@ fmath {
 }
 
 /* hack: adds some padding between columns when page is ~700px wide */
-.column {
-  margin-right: 10px;
+.extra-right-margin {
+  margin-right: 2rem;
 }

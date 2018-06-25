@@ -4,13 +4,15 @@ Simple web interface to a 0xBitcoin-dispensing smart contract. ([link](https://0
 
 #### TODO
 
- - verify history is limited to 12 elements
- - add 'deposit' events to the history
  - add 'rate change' events to the history
- - improve visibility of status messages
  - add favicon set
- - add gtag info
  - show txhash link before transaction is confirmed, if possible
+ - remove margin-right from all but the main column
+ - combine contract code and site into single repo
+ - ~~verify history is limited to 12 elements~~
+ - ~~add 'deposit' events to the history~~
+ - ~~improve visibility of status messages~~
+ - ~~add gtag info~~
 
 #### BUGS
 
