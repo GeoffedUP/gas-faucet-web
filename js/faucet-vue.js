@@ -199,7 +199,6 @@ faucet_app = new Vue({
           });
         });
       });
-      return events
     },
     getDonateEvents: function (num_blocks_into_past) {
       var latest_eth_block = this.latest_eth_block;
@@ -212,7 +211,7 @@ faucet_app = new Vue({
         topics: [
           '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef', 
           null,
-          '0x0000000000000000000000008302d610f9c6b94560befb9a7118b4aa7f414ec3'],
+          '0x000000000000000000000000'+this.contract_address.slice(2,65)],
       })
       .then((result) => {
         log("got filter results:", result.length, "transactions");
@@ -278,7 +277,6 @@ faucet_app = new Vue({
           //});
         });
       });
-      return events
     },
   }
 })
