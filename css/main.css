@@ -182,3 +182,8 @@ fmath {
 .footer{
   font-size: 0.95em;
 }
+
+/* hack: adds some padding between columns when page is ~700px wide */
+.column {
+  margin-right: 10px;
+}
