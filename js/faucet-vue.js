@@ -153,7 +153,7 @@ faucet_app = new Vue({
 
         //console.log('4addresssss:', this.contract_address);
         result.forEach(function(transaction){
-          //console.log(transaction);
+          console.log(transaction);
           function getMinerAddressFromTopic(address_from_topic) {
             return '0x' + address_from_topic.substr(26, 41);
           }
@@ -168,7 +168,7 @@ faucet_app = new Vue({
           //console.log('5addresssss:', contract_address);
           eth.getTransactionByHash(tx_hash)
           .then(function(result){
-            //console.log(result);
+            console.log(result);
             let gas_price = result.gasPrice.toNumber() / 10**9;
             //console.log('gas_price', gas_price);
             //let gas = result.gas.toNumber();

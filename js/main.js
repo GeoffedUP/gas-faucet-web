@@ -71,6 +71,7 @@ eth.accounts()
 
 // const token = eth.contract(tokenABI).at(_CONTRACT_ADDRESS);
 
+var latest_timestamp = Date.now();
 var latest_eth_block = null;
 eth.blockNumber().then((value)=>{
   latest_eth_block = parseInt(value.toString(10), 10);
@@ -81,14 +82,14 @@ function ethBlockNumberToDateStr(eth_block) {
   //log('latest e', latest_eth_block)
   /* TODO: use web3 instead, its probably more accurate */
   /* blockDate = new Date(web3.eth.get bBlock(startBlock-i+1).timestamp*1000); */
-  return new Date(Date.now() - ((latest_eth_block - eth_block)*_SECONDS_PER_ETH_BLOCK*1000)).toLocaleDateString()
+  return new Date(latest_timestamp - ((latest_eth_block - eth_block)*_SECONDS_PER_ETH_BLOCK*1000)).toLocaleDateString()
 }
 function ethBlockNumberToTimestamp(eth_block) {
   //log('converting', eth_block)
   //log('latest e', latest_eth_block)
   /* TODO: use web3 instead, its probably more accurate */
   /* blockDate = new Date(web3.eth.getBlock(startBlock-i+1).timestamp*1000); */
-  return new Date(Date.now() - ((latest_eth_block - eth_block)*_SECONDS_PER_ETH_BLOCK*1000)).toLocaleString()
+  return new Date(latest_timestamp - ((latest_eth_block - eth_block)*_SECONDS_PER_ETH_BLOCK*1000)).toLocaleString()
 }
 
 /* convert seconds to a short readable string ("1.2 hours", "5.9 months") */
