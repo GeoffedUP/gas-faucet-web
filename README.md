@@ -10,6 +10,8 @@ Simple web interface to a 0xBitcoin-dispensing smart contract. ([link](https://0
  - remove margin-right from all but the main column
  - combine contract code and site into single repo
  - naming of FaucetApp and faucet_app is confusing, use more specific variable names
+ - clean up javascript code in index.html
+ - move some of the vue logic from index.html to the vue app (choosing to show the error message that hides the 'submit' button for example)
  - ~~verify history is limited to 12 elements~~
  - ~~add 'deposit' events to the history~~
  - ~~improve visibility of status messages~~
