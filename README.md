@@ -9,6 +9,7 @@ Simple web interface to a 0xBitcoin-dispensing smart contract. ([link](https://0
  - show txhash link before transaction is confirmed, if possible
  - remove margin-right from all but the main column
  - combine contract code and site into single repo
+ - naming of FaucetApp and faucet_app is confusing, use more specific variable names
  - ~~verify history is limited to 12 elements~~
  - ~~add 'deposit' events to the history~~
  - ~~improve visibility of status messages~~
