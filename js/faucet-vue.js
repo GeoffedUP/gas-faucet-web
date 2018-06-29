@@ -80,9 +80,9 @@ faucet_app = new Vue({
       eth.blockNumber().then((value)=>{
         this.latest_eth_block = parseInt(value.toString(10), 10);
 
-        /* check the last 23040 blocks (about 4 days). TODO: increase maybe */
-        this.getDispenseEvents(23040);
-        this.getDonateEvents(23040);
+        /* check the last 8 days. TODO: increase maybe */
+        this.getDispenseEvents(4 * 60 * 24 * 8);
+        this.getDonateEvents(4 * 60 * 24 * 8);
       });
       //this.contract_address = this.contract_address;
     },
