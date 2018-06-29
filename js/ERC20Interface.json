@@ -180,9 +180,9 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity ^0.4.18;\r\n\r\ncontract ERC20Interface {\r\n    function totalSupply() public constant returns (uint);\r\n    function balanceOf(address tokenOwner) public constant returns (uint balance);\r\n    function allowance(address tokenOwner, address spender) public constant returns (uint remaining);\r\n    function transfer(address to, uint tokens) public returns (bool success);\r\n    function approve(address spender, uint tokens) public returns (bool success);\r\n    function transferFrom(address from, address to, uint tokens) public returns (bool success);\r\n\r\n    event Transfer(address indexed from, address indexed to, uint tokens);\r\n    event Approval(address indexed tokenOwner, address indexed spender, uint tokens);\r\n}",
-  "sourcePath": "C:\\Users\\g0tmk\\repos\\gas-faucet\\contracts\\ERC20Interface.sol",
+  "sourcePath": "C:\\Users\\Developer\\repos\\gas-faucet\\contracts\\ERC20Interface.sol",
   "ast": {
-    "absolutePath": "/C/Users/g0tmk/repos/gas-faucet/contracts/ERC20Interface.sol",
+    "absolutePath": "/C/Users/Developer/repos/gas-faucet/contracts/ERC20Interface.sol",
     "exportedSymbols": {
       "ERC20Interface": [
         68
@@ -1016,7 +1016,7 @@
     "src": "0:727:0"
   },
   "legacyAST": {
-    "absolutePath": "/C/Users/g0tmk/repos/gas-faucet/contracts/ERC20Interface.sol",
+    "absolutePath": "/C/Users/Developer/repos/gas-faucet/contracts/ERC20Interface.sol",
     "exportedSymbols": {
       "ERC20Interface": [
         68

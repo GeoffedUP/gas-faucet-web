@@ -238,9 +238,9 @@
   "sourceMap": "825:4117:1:-;;;1044:438;8:9:-1;5:2;;;30:1;27;20:12;5:2;1044:438:1;414:10:2;406:5;;:18;;;;;;;;;;;;;;;;;;1143:42:1;1122:18;;:63;;;;;;;;;;;;;;;;;;1473:1;1450:20;:24;;;;825:4117;;;;;;",
   "deployedSourceMap": "825:4117:1:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;3865:8;;;935:35;;8:9:-1;5:2;;;30:1;27;20:12;5:2;935:35:1;;;;;;;;;;;;;;;;;;;;;;;3188:104;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3188:104:1;;;;;;;;;;;;;;;;;;;;;;;1829:313;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1829:313:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;634:191:2;;8:9:-1;5:2;;;30:1;27;20:12;5:2;634:191:2;;;;;;233:20;;8:9:-1;5:2;;;30:1;27;20:12;5:2;233:20:2;;;;;;;;;;;;;;;;;;;;;;;;;;;895:33:1;;8:9:-1;5:2;;;30:1;27;20:12;5:2;895:33:1;;;;;;;;;;;;;;;;;;;;;;;;;;;2820:128;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2820:128:1;;;;;;;;;;;;;;;;;;;;;;;4104:145;;8:9:-1;5:2;;;30:1;27;20:12;5:2;4104:145:1;;;;;;;;;;;;;;;;;;;;;;;;;;260:23:2;;8:9:-1;5:2;;;30:1;27;20:12;5:2;260:23:2;;;;;;;;;;;;;;;;;;;;;;;;;;;4467:472:1;;8:9:-1;5:2;;;30:1;27;20:12;5:2;4467:472:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2382:229;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2382:229:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;3527:105;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3527:105:1;;;;;;;;;;;;;;;;;;;;;;;;;;526:102:2;;8:9:-1;5:2;;;30:1;27;20:12;5:2;526:102:2;;;;;;;;;;;;;;;;;;;;;;;;;;;;935:35:1;;;;:::o;3188:104::-;3237:7;3264:20;;3257:27;;3188:104;:::o;1829:313::-;1886:18;1907:48;1943:11;1907:35;:48::i;:::-;1886:69;;1991:10;1974:14;:12;:14::i;:::-;:27;1966:36;;;;;;;;2030:18;;;;;;;;;;;2015:43;;;2059:11;2072:10;2015:68;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2015:68:1;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;2015:68:1;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;2015:68:1;;;;;;;;;;;;;;;;;2110:11;2101:33;;;2123:10;2101:33;;;;;;;;;;;;;;;;;;1829:313;;:::o;634:191:2:-;701:8;;;;;;;;;;;687:22;;:10;:22;;;679:31;;;;;;;;749:8;;;;;;;;;;;721:37;;742:5;;;;;;;;;;;721:37;;;;;;;;;;;;777:8;;;;;;;;;;;769:5;;:16;;;;;;;;;;;;;;;;;;815:1;796:8;;:21;;;;;;;;;;;;;;;;;;634:191::o;233:20::-;;;;;;;;;;;;;:::o;895:33:1:-;;;;;;;;;;;;;:::o;2820:128::-;2865:4;2905:18;;;;;;;;;;;2890:44;;;2935:4;2890:50;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2890:50:1;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;2890:50:1;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;2890:50:1;;;;;;;;;;;;;;;;2883:57;;2820:128;:::o;4104:145::-;492:5:2;;;;;;;;;;;478:19;;:10;:19;;;470:28;;;;;;;;4194:4:1;4186:21;;;4177:6;:30;4169:39;;;;;;;;4219:5;;;;;;;;;;;:14;;:22;4234:6;4219:22;;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;4219:22:1;4104:145;:::o;260:23:2:-;;;;;;;;;;;;;:::o;4467:472:1:-;492:5:2;;;;;;;;;;;478:19;;:10;:19;;;470:28;;;;;;;;4894:12:1;4879:37;;;4917:5;;;;;;;;;;;4924:6;4879:52;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;4879:52:1;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;4879:52:1;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;4879:52:1;;;;;;;;;;;;;;;;;4467:472;;:::o;2382:229::-;2466:7;2513:1;2489:20;;:25;2486:66;;;2538:1;2531:8;;;;2486:66;2569:34;2582:20;;2569:8;:12;;:34;;;;:::i;:::-;2562:41;;2382:229;;;;:::o;3527:105::-;492:5:2;;;;;;;;;;;478:19;;:10;:19;;;470:28;;;;;;;;3619:5:1;3596:20;:28;;;;3527:105;:::o;526:102:2:-;492:5;;;;;;;;;;;478:19;;:10;:19;;;470:28;;;;;;;;611:9;600:8;;:20;;;;;;;;;;;;;;;;;;526:102;:::o;482:270:3:-;540:7;631:9;647:1;643;:5;;;;;;;;631:17;;745:1;738:8;;482:270;;;;;:::o",
   "source": "pragma solidity ^0.4.17;\r\n/*\r\n\r\n0xBitcoin Token Faucet in a Smart Contract (ver 0.0.0)\r\n\r\nAny tokens sent to this contract may be withdrawn by other users through use\r\nof the dispense() function. The dispensed amount is dependant on the\r\ntransaction's gas price. This means a transaction sent at 4 gwei will dispense\r\ntwice as many tokens as a transaction sent at 2 gwei.\r\n\r\nThe dispensing \"rate\" is changable by the contract owner and allows the rate to\r\nbe changed over time to follow the token's price. The intention of this ratio is\r\nto ensure that the value of ether spent as gas is roughly equal to the value of\r\nthe tokens received.\r\n\r\nTypically calls to dispense() cost about 41879 gas total.\r\n\r\n*/\r\n\r\npragma solidity ^0.4.18;\r\n\r\nimport \"./SafeMath.sol\";\r\nimport \"./ERC20Interface.sol\";\r\nimport \"./Owned.sol\";\r\n\r\n\r\n\r\ncontract GasFaucet is Owned {\r\n    using SafeMath for uint256;\r\n\r\n    address public faucetTokenAddress;\r\n    uint256 public priceInWeiPerSatoshi;\r\n\r\n    event Dispense(address indexed from, uint256 sendAmount);\r\n\r\n    constructor() public {\r\n        // 0xBitcoin Token Address (Ropsten)\r\n        faucetTokenAddress = 0x9D2Cc383E677292ed87f63586086CfF62a009010;\r\n        // 0xBitcoin Token Address (Mainnet)\r\n        // faucetTokenAddress = 0xB6eD7644C69416d67B522e20bC294A9a9B405B31;\r\n\r\n        // Set rate to 0 satoshis / wei. Calls to 'dispense' will send 0 tokens\r\n        // until the rate is manually changed.\r\n        priceInWeiPerSatoshi = 0;\r\n    }\r\n\r\n    // ------------------------------------------------------------------------\r\n    // Dispense some free tokens. The more gas you spend, the more tokens you\r\n    // recieve. \r\n    // \r\n    // Tokens recieved (in satoshi) = gasprice / priceInWeiPerSatoshi\r\n    // ------------------------------------------------------------------------\r\n    function dispense(address destination) public {\r\n        uint256 sendAmount = calculateDispensedTokensForGasPrice(tx.gasprice);\r\n        require(tokenBalance() > sendAmount);\r\n\r\n        ERC20Interface(faucetTokenAddress).transfer(destination, sendAmount);\r\n\r\n        emit Dispense(destination, sendAmount);\r\n    }\r\n    \r\n    // ------------------------------------------------------------------------\r\n    // Retrieve the current dispensing rate in satoshis per gwei\r\n    // ------------------------------------------------------------------------\r\n    function calculateDispensedTokensForGasPrice(uint256 gasprice) public view returns (uint256) {\r\n        if(priceInWeiPerSatoshi == 0){ \r\n            return 0; \r\n        }\r\n        return gasprice.div(priceInWeiPerSatoshi);\r\n    }\r\n    \r\n    // ------------------------------------------------------------------------\r\n    // Retrieve Faucet's balance \r\n    // ------------------------------------------------------------------------\r\n    function tokenBalance() public view returns (uint)  {\r\n        return ERC20Interface(faucetTokenAddress).balanceOf(this);\r\n    }\r\n    \r\n    // ------------------------------------------------------------------------\r\n    // Retrieve the current dispensing rate in satoshis per gwei\r\n    // ------------------------------------------------------------------------\r\n    function getWeiPerSatoshi() public view returns (uint256) {\r\n        return priceInWeiPerSatoshi;\r\n    }\r\n    \r\n    // ------------------------------------------------------------------------\r\n    // Set the current dispensing rate in satoshis per gwei\r\n    // ------------------------------------------------------------------------\r\n    function setWeiPerSatoshi(uint256 price) public onlyOwner {\r\n        priceInWeiPerSatoshi = price;\r\n    }\r\n\r\n    // ------------------------------------------------------------------------\r\n    // Don't accept ETH\r\n    // ------------------------------------------------------------------------\r\n    function () public payable {\r\n        revert();\r\n    }\r\n\r\n    // ------------------------------------------------------------------------\r\n    // Owner can withdraw any accidentally sent eth\r\n    // ------------------------------------------------------------------------\r\n    function withdrawEth(uint256 amount) public onlyOwner {\r\n        require(amount < address(this).balance);\r\n        owner.transfer(amount);\r\n    }\r\n\r\n    // ------------------------------------------------------------------------\r\n    // Owner can transfer out any ERC20 tokens\r\n    // ------------------------------------------------------------------------\r\n    function transferAnyERC20Token(address tokenAddress, uint256 tokens) public onlyOwner {\r\n        \r\n        // Note: Owner has full control of priceInWeiPerSatoshi, so preventing\r\n        // withdrawal of the faucetTokenAddress token serves no purpose. It\r\n        // would merely be misleading.\r\n        //\r\n        // if(tokenAddress == faucetTokenAddress){ \r\n        //     revert(); \r\n        // }\r\n\r\n        ERC20Interface(tokenAddress).transfer(owner, tokens);\r\n    }\r\n}",
-  "sourcePath": "C:\\Users\\g0tmk\\repos\\gas-faucet\\contracts\\GasFaucet.sol",
+  "sourcePath": "C:\\Users\\Developer\\repos\\gas-faucet\\contracts\\GasFaucet.sol",
   "ast": {
-    "absolutePath": "/C/Users/g0tmk/repos/gas-faucet/contracts/GasFaucet.sol",
+    "absolutePath": "/C/Users/Developer/repos/gas-faucet/contracts/GasFaucet.sol",
     "exportedSymbols": {
       "GasFaucet": [
         236
@@ -272,7 +272,7 @@
         "src": "710:24:1"
       },
       {
-        "absolutePath": "/C/Users/g0tmk/repos/gas-faucet/contracts/SafeMath.sol",
+        "absolutePath": "/C/Users/Developer/repos/gas-faucet/contracts/SafeMath.sol",
         "file": "./SafeMath.sol",
         "id": 72,
         "nodeType": "ImportDirective",
@@ -283,7 +283,7 @@
         "unitAlias": ""
       },
       {
-        "absolutePath": "/C/Users/g0tmk/repos/gas-faucet/contracts/ERC20Interface.sol",
+        "absolutePath": "/C/Users/Developer/repos/gas-faucet/contracts/ERC20Interface.sol",
         "file": "./ERC20Interface.sol",
         "id": 73,
         "nodeType": "ImportDirective",
@@ -294,7 +294,7 @@
         "unitAlias": ""
       },
       {
-        "absolutePath": "/C/Users/g0tmk/repos/gas-faucet/contracts/Owned.sol",
+        "absolutePath": "/C/Users/Developer/repos/gas-faucet/contracts/Owned.sol",
         "file": "./Owned.sol",
         "id": 74,
         "nodeType": "ImportDirective",
@@ -2319,7 +2319,7 @@
     "src": "0:4942:1"
   },
   "legacyAST": {
-    "absolutePath": "/C/Users/g0tmk/repos/gas-faucet/contracts/GasFaucet.sol",
+    "absolutePath": "/C/Users/Developer/repos/gas-faucet/contracts/GasFaucet.sol",
     "exportedSymbols": {
       "GasFaucet": [
         236
@@ -2351,7 +2351,7 @@
         "src": "710:24:1"
       },
       {
-        "absolutePath": "/C/Users/g0tmk/repos/gas-faucet/contracts/SafeMath.sol",
+        "absolutePath": "/C/Users/Developer/repos/gas-faucet/contracts/SafeMath.sol",
         "file": "./SafeMath.sol",
         "id": 72,
         "nodeType": "ImportDirective",
@@ -2362,7 +2362,7 @@
         "unitAlias": ""
       },
       {
-        "absolutePath": "/C/Users/g0tmk/repos/gas-faucet/contracts/ERC20Interface.sol",
+        "absolutePath": "/C/Users/Developer/repos/gas-faucet/contracts/ERC20Interface.sol",
         "file": "./ERC20Interface.sol",
         "id": 73,
         "nodeType": "ImportDirective",
@@ -2373,7 +2373,7 @@
         "unitAlias": ""
       },
       {
-        "absolutePath": "/C/Users/g0tmk/repos/gas-faucet/contracts/Owned.sol",
+        "absolutePath": "/C/Users/Developer/repos/gas-faucet/contracts/Owned.sol",
         "file": "./Owned.sol",
         "id": 74,
         "nodeType": "ImportDirective",

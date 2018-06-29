@@ -18,6 +18,9 @@ Smart contract code [here](https://0x1d00ffff.github.io/gas-faucet-web/).
  - show txhash link before transaction is confirmed, if possible
  - remove margin-right from all but the main column
  - combine contract code and site into single repo
+ - naming of FaucetApp and faucet_app is confusing, use more specific variable names
+ - clean up javascript code in index.html
+ - move some of the vue logic from index.html to the vue app (choosing to show the error message that hides the 'submit' button for example)
  - ~~verify history is limited to 12 elements~~
  - ~~add 'deposit' events to the history~~
  - ~~improve visibility of status messages~~
