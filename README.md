@@ -1,9 +1,18 @@
 # 0xBitcoin Gas Faucet
-Simple web interface to a 0xBitcoin-dispensing smart contract. ([link](https://0x1d00ffff.github.io/gas-faucet/))
+Simple web interface to a 0xBitcoin-dispensing smart contract. ([link](https://0x1d00ffff.github.io/gas-faucet-web/))
 
+Smart contract code [here](https://0x1d00ffff.github.io/gas-faucet-web/).
+
+#### BUGS
+
+ - changing values in the gwei field causes the 'time' column to recalculate
+ - "Past transactions" list occasionally fails to load
 
 #### TODO
 
+ - add a field for 'expected transaction cost' under the 'Gas Price' input
+ - add a message for when the gas is too high
+ - add community links to a header
  - add 'rate change' events to the history
  - add favicon set
  - show txhash link before transaction is confirmed, if possible
@@ -13,10 +22,6 @@ Simple web interface to a 0xBitcoin-dispensing smart contract. ([link](https://0
  - ~~add 'deposit' events to the history~~
  - ~~improve visibility of status messages~~
  - ~~add gtag info~~
-
-#### BUGS
-
- - "Past transactions" list occasionally fails to load
 
 #### Misc notes
 
