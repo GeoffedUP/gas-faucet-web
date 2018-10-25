@@ -81,7 +81,7 @@ faucet_app = new Vue({
         this.latest_eth_block = parseInt(value.toString(10), 10);
 
         /* check the last 32 days. TODO: increase maybe */
-        let days = 32;
+        let days = 60;
         this.getDispenseEvents(4 * 60 * 24 * days);
         this.getDonateEvents(4 * 60 * 24 * days);
       });
