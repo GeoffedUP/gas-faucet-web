@@ -6,7 +6,7 @@ function addToURL(value){
   }
 }
 
-const version = "v0.0.2";
+const version = "v1.0.1";
 
 log('0xBitcoin Gas Faucet', version);
 el('#interfaceversion').innerHTML = version;
@@ -149,9 +149,9 @@ function toReadableThousandsLong(num_value, should_add_b_tags) {
     }
   }
   if(num_value < 10) {
-    var num_value_string = num_value.toFixed(1); 
+    var num_value_string = num_value.toFixed(1);
   } else {
-    var num_value_string = num_value.toFixed(0); 
+    var num_value_string = num_value.toFixed(0);
   }
   if(should_add_b_tags) {
     num_value_string = '<b>' + num_value_string + '</b>';
@@ -206,5 +206,3 @@ function getMinerColor(address, known_miners) {
   }
   return hexcolor;
 }
-
-
