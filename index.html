@@ -32,7 +32,7 @@ Attributions:
     <!-- jqMath allows for real equation formatting -->
     <!--<script src="js/jqmath-etc-0.4.6.min.js" charset="utf-8"></script>-->
     <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>-->
-    
+
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <style>
       [v-cloak] {
@@ -69,8 +69,8 @@ Attributions:
     <script type="text/javascript">
       var el = function(id){ return document.querySelector(id); };
       /* 'safe' version if el that returns a dummy for non-existent elements */
-      var el_safe = function(id) { 
-        let e = el(id); 
+      var el_safe = function(id) {
+        let e = el(id);
         if (e) {
           return e;
         } else {
@@ -97,8 +97,10 @@ Attributions:
     <div class="container" id="faucet" v-cloak>
       <div class="row">
         <div class="column">
-          <img class="top-logo" alt="0xBitcoin Gas Faucet Logo" src="img/0xBTC_Orange_faucet-40px.png" height=40 width=40 />
-          <h1>0xBitcoin Gas Faucet</h1>
+          <img class="top-logo" alt="0xBitcoin Gas Faucet Logo" src="img/XBC-faucet.png" height=110 width=110/>
+          <h1>XBC Gas Faucet</h1>
+          <h7>0xBitcoin the pure mined currency for Ethereum dApps</h7>
+
         </div>
         <div class="column">
           <div style="text-align: right; margin: 0.67em 0; font-size: 1.1em;">
@@ -251,9 +253,9 @@ Attributions:
             If the faucet dispensed more tokens then the price of Gas, there
             would be an incentive for someone to drain the faucet for profit.
             Some faucet designs use a different approach to prevent this, usually related to
-            rate-limiting. These approaches have flaws and inconvenience normal 
+            rate-limiting. These approaches have flaws and inconvenience normal
             users more than abusers. This faucet's goal is to be an easy way to
-            get a small number of tokens to play with; not as a source of 
+            get a small number of tokens to play with; not as a source of
             income.
           </p>
         </div>
@@ -344,7 +346,7 @@ Attributions:
         let searchParams = new URLSearchParams(window.location.search)
         $("#row-faucet").show();
       }
-      
+
       try {
         $(document).ready(function() {
             log("DOMready");
