@@ -6,7 +6,7 @@ function addToURL(value){
   }
 }
 
-const version = "v1.0.1";
+const version = "v1.0.3";
 
 log('0xBitcoin Gas Faucet', version);
 el('#interfaceversion').innerHTML = version;
